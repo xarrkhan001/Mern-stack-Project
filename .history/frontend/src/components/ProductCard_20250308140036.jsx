@@ -32,19 +32,15 @@ const ProductCard = ({ product }) => {
   // Handle update product
   const handleUpdateProduct = async () => {
     try {
-      const response = await updateProduct(product._id, updatedProduct);
-
-      if (response && response.success !== undefined && response.message) {
-        const { success, message } = response;
-        if (success) {
-          toast.success(message); // Show success toast
-          setShowModal(false); // Automatically close the modal after a successful update
-        } else {
-          toast.error(message); // Show error toast if update fails
-        }
+      const { success, message } = await updateProduct(
+        product._id,
+        updatedProduct
+      );
+      if (success) {
+        toast.success(message); // Show success toast
+        setShowModal(false); // Close modal after successful update
       } else {
-        // Handle the case when the response doesn't have the expected structure
-        toast.error("Unexpected response from server.");
+        toast.error(message); // Show error toast if update fails
       }
     } catch (error) {
       console.error("Error updating product:", error);
@@ -91,7 +87,7 @@ const ProductCard = ({ product }) => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleUpdateProduct(); // Trigger update
+                handleUpdateProduct();
               }}
             >
               <div className="mb-4">
@@ -157,7 +153,7 @@ const ProductCard = ({ product }) => {
               <div className="flex justify-between mt-4">
                 <button
                   type="button"
-                  onClick={() => setShowModal(false)} // Close modal if cancel is clicked
+                  onClick={() => setShowModal(false)}
                   className="bg-gray-300 text-black py-2 px-4 rounded-md dark:bg-gray-700 dark:text-white"
                 >
                   Cancel

@@ -34,23 +34,9 @@ const ProductCard = ({ product }) => {
     try {
       const response = await updateProduct(product._id, updatedProduct);
 
-      if (response && response.success !== undefined && response.message) {
-        const { success, message } = response;
-        if (success) {
-          toast.success(message); // Show success toast
-          setShowModal(false); // Automatically close the modal after a successful update
-        } else {
-          toast.error(message); // Show error toast if update fails
-        }
-      } else {
-        // Handle the case when the response doesn't have the expected structure
-        toast.error("Unexpected response from server.");
-      }
-    } catch (error) {
-      console.error("Error updating product:", error);
-      toast.error("Something went wrong while updating the product.");
-    }
-  };
+      
+     
+    
 
   return (
     <>

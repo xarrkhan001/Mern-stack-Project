@@ -4,6 +4,18 @@ import { useProductStore } from "../store/product";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Configure the toast notification placement
+toast.configure({
+  position: toast.POSITION.TOP_RIGHT,
+  autoClose: 5000, // Optional: Adjust how long the toast remains visible (in ms)
+  hideProgressBar: false,
+  newestOnTop: true,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+});
+
 const ProductCard = ({ product }) => {
   const { deleteProduct, updateProduct } = useProductStore();
   const [showModal, setShowModal] = useState(false);
@@ -33,18 +45,13 @@ const ProductCard = ({ product }) => {
   const handleUpdateProduct = async () => {
     try {
       const response = await updateProduct(product._id, updatedProduct);
+      const { success, message } = response;
 
-      if (response && response.success !== undefined && response.message) {
-        const { success, message } = response;
-        if (success) {
-          toast.success(message); // Show success toast
-          setShowModal(false); // Automatically close the modal after a successful update
-        } else {
-          toast.error(message); // Show error toast if update fails
-        }
+      if (success) {
+        toast.success(message); // Show success toast
+        setShowModal(false); // Automatically close the modal after a successful update
       } else {
-        // Handle the case when the response doesn't have the expected structure
-        toast.error("Unexpected response from server.");
+        toast.error(message); // Show error toast if update fails
       }
     } catch (error) {
       console.error("Error updating product:", error);
